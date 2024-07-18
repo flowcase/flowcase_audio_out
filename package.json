@@ -1,0 +1,31 @@
+{
+  "name": "flowcase_audio_out",
+  "version": "1.0.0",
+  "bin": "websocket-relay.js",
+  "pkg": {
+    "outputPath": "dist",
+    "targets": [
+      "node20-linux-x64"
+    ]
+  },
+  "main": "websocket-relay.js",
+  "scripts": {
+    "test": "node websocket-relay.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flowcase/flowcase_audio_out.git"
+  },
+  "author": "Flowcase",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flowcase/flowcase_audio_out/issues"
+  },
+  "homepage": "https://github.com/flowcase/flowcase_audio_out#readme",
+  "description": "Websocket relay for JSMpeg",
+  "dependencies": {
+    "basic-auth": "^2.0.1",
+    "https": "^1.0.0",
+    "ws": "^8.18.0"
+  }
+}
