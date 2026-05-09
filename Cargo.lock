@@ -348,6 +348,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
+ "base64",
  "bytes",
  "clap",
  "futures-util",
@@ -358,6 +359,7 @@ dependencies = [
  "thiserror 2.0.18",
  "tokio",
  "tokio-rustls",
+ "tokio-tungstenite",
  "tower",
  "tower-http",
  "tracing",
