@@ -133,3 +133,8 @@ dist
 # Added by cargo
 
 /target
+
+# Bench fixtures
+/bench/node_modules
+/bench/results.txt
+/legacy-node/node_modules
