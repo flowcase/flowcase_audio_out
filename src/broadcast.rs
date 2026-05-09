@@ -24,7 +24,6 @@ pub struct BroadcastState {
 }
 
 impl BroadcastState {
-    #[allow(dead_code)] // wired up in T1A.5
     pub fn new(tx: broadcast::Sender<Bytes>, auth_token: Option<String>) -> Self {
         Self {
             tx,
@@ -33,7 +32,6 @@ impl BroadcastState {
     }
 }
 
-#[allow(dead_code)] // wired up in T1A.5
 pub fn router(state: BroadcastState) -> Router {
     Router::new().route("/", get(handle_ws)).with_state(state)
 }
@@ -117,10 +115,17 @@ fn check_basic_auth(headers: &HeaderMap, expected: &str) -> bool {
     decoded_str == expected
 }
 
-#[allow(dead_code)] // wired up in T1A.5 (TLS-aware variant lives there)
-pub async fn serve_plain(state: BroadcastState, port: u16) -> Result<()> {
-    let listener = tokio::net::TcpListener::bind(("0.0.0.0", port)).await?;
-    axum::serve(listener, router(state)).await?;
+pub async fn serve_tls(
+    state: BroadcastState,
+    port: u16,
+    tls_config: rustls::ServerConfig,
+) -> Result<()> {
+    let addr = std::net::SocketAddr::from(([0, 0, 0, 0], port));
+    let config = axum_server::tls_rustls::RustlsConfig::from_config(Arc::new(tls_config));
+    info!(%addr, "wss broadcast server listening");
+    axum_server::bind_rustls(addr, config)
+        .serve(router(state).into_make_service())
+        .await?;
     Ok(())
 }
 

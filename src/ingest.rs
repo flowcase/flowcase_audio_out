@@ -23,7 +23,6 @@ pub struct IngestState {
 }
 
 impl IngestState {
-    #[allow(dead_code)] // wired up in T1A.5
     pub fn new(secret: String, tx: broadcast::Sender<Bytes>) -> Self {
         Self {
             secret: Arc::new(secret),
@@ -32,14 +31,12 @@ impl IngestState {
     }
 }
 
-#[allow(dead_code)] // wired up in T1A.5
 pub fn router(state: IngestState) -> Router {
     Router::new()
         .route("/:secret", post(handle_ingest))
         .with_state(state)
 }
 
-#[allow(dead_code)] // wired up in T1A.5
 pub async fn serve(state: IngestState, port: u16) -> Result<()> {
     let listener = TcpListener::bind(("0.0.0.0", port)).await?;
     info!(port, "ingest server listening");

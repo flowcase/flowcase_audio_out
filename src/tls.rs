@@ -11,7 +11,6 @@ use rustls::ServerConfig;
 ///
 /// The returned config has client auth disabled and uses the
 /// aws-lc-rs rustls crypto provider.
-#[allow(dead_code)] // wired up in T1A.5
 pub fn load_tls_config(cert_path: &Path, key_path: &Path) -> Result<ServerConfig> {
     install_default_crypto_provider();
 
@@ -38,7 +37,6 @@ pub fn load_tls_config(cert_path: &Path, key_path: &Path) -> Result<ServerConfig
         .context("constructing rustls ServerConfig")
 }
 
-#[allow(dead_code)] // called by load_tls_config; wired up in T1A.5
 fn install_default_crypto_provider() {
     static INIT: Once = Once::new();
     INIT.call_once(|| {
