@@ -1,0 +1,42 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            arch: amd64
+          - os: ubuntu-22.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: cargo build --release
+        run: cargo build --release
+
+      - name: package tarball
+        # The legacy install_audio.sh in core-droplet-images extracts this
+        # tarball and chmods a binary named `flowcase_audio_out_linux`,
+        # so rename when packaging.
+        run: |
+          set -euo pipefail
+          stage=$(mktemp -d)
+          cp target/release/flowcase_audio_out "$stage/flowcase_audio_out_linux"
+          tar -czvf flowcase_audio_out_linux_${{ matrix.arch }}.tar.gz \
+              -C "$stage" flowcase_audio_out_linux
+
+      - name: upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: flowcase_audio_out_linux_${{ matrix.arch }}.tar.gz
